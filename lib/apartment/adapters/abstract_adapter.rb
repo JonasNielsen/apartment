@@ -151,7 +151,10 @@ module Apartment
 
         ActiveRecord::Schema.verbose = false    # do not log schema load output.
         if Apartment.schema_format == :sql
-          raise ApartmentError, "Using the :sql schema format is not supported when using Postgres schemas." if Apartment.use_postgres_schemas
+          #
+          # Assumes that structure.sql is clean of "CREATE SCHEMA" statements
+          # and things that can cause it not to be used to generate a new schema
+          #
           execute_or_abort(Apartment.database_schema_file)
         else
           load_or_abort(Apartment.database_schema_file)
